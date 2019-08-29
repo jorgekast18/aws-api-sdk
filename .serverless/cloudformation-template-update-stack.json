@@ -1,0 +1,1844 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The AWS CloudFormation template for this Serverless application",
+  "Resources": {
+    "ServerlessDeploymentBucket": {
+      "Type": "AWS::S3::Bucket"
+    },
+    "UploadS3LogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/olimpia-serverless-dev-uploadS3"
+      }
+    },
+    "CompareFacesLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/olimpia-serverless-dev-compareFaces"
+      }
+    },
+    "CreateCollectionLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/olimpia-serverless-dev-createCollection"
+      }
+    },
+    "DeleteCollectionLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/olimpia-serverless-dev-deleteCollection"
+      }
+    },
+    "IndexFacesLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/olimpia-serverless-dev-indexFaces"
+      }
+    },
+    "ListFacesLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/olimpia-serverless-dev-listFaces"
+      }
+    },
+    "SearchFacesByImageLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/olimpia-serverless-dev-searchFacesByImage"
+      }
+    },
+    "GetItemByIdLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/olimpia-serverless-dev-getItemById"
+      }
+    },
+    "AddItemLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/olimpia-serverless-dev-addItem"
+      }
+    },
+    "IamRoleLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "dev",
+                  "olimpia-serverless",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-uploadS3:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-compareFaces:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-createCollection:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-deleteCollection:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-indexFaces:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-listFaces:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-searchFacesByImage:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-getItemById:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-addItem:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-uploadS3:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-compareFaces:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-createCollection:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-deleteCollection:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-indexFaces:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-listFaces:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-searchFacesByImage:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-getItemById:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/olimpia-serverless-dev-addItem:*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:Upload"
+                  ],
+                  "Resource": [
+                    "arn:aws:s3:::*"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "Path": "/",
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              "olimpia-serverless",
+              "dev",
+              "us-east-2",
+              "lambdaRole"
+            ]
+          ]
+        }
+      }
+    },
+    "UploadS3LambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/olimpia-serverless/dev/1566921546118-2019-08-27T15:59:06.118Z/olimpia-serverless.zip"
+        },
+        "FunctionName": "olimpia-serverless-dev-uploadS3",
+        "Handler": "handler.uploadS3",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs8.10",
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "AMAZON_DEV_ACCESS_KEY_ID": "AKIAYEBWVLF62BME7KU5",
+            "AMAZON_DEV_SECRET_ACCESS_KEY": "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",
+            "AWS_BUCKET": "davivienda-faces",
+            "AWS_BUCKET_FOLDER_OLIMPIA": "davivienda-faces/",
+            "AWS_DYNAMO_TABLE": "davivienda_turns",
+            "AWS_COLLECTION_ID": "davivienda-faces",
+            "TWILIO_ACCOUNT_SID": "ACae501556753d2cf39a56dabf07b7b17a",
+            "TWILIO_AUTH_TOKEN": "13060e797a0db0fade7715866cc495fd",
+            "TWILIO_MESSAGING_SERVICE_SID": "MGe8ad5ba8a079d5da9c3e73eda128bb04",
+            "REGION": "us-east-1"
+          }
+        }
+      },
+      "DependsOn": [
+        "UploadS3LogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "UploadS3LambdaVersionbjJ2lu3T49jLRIHcKCxeRnV5UDES1h6lHMDt7I0ZHs": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "UploadS3LambdaFunction"
+        },
+        "CodeSha256": "eCdxU/C9n4sM4GNqNLm/UEdFxZvvY3Migwn9w0fAOR4="
+      }
+    },
+    "CompareFacesLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/olimpia-serverless/dev/1566921546118-2019-08-27T15:59:06.118Z/olimpia-serverless.zip"
+        },
+        "FunctionName": "olimpia-serverless-dev-compareFaces",
+        "Handler": "handler.compareFaces",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs8.10",
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "AMAZON_DEV_ACCESS_KEY_ID": "AKIAYEBWVLF62BME7KU5",
+            "AMAZON_DEV_SECRET_ACCESS_KEY": "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",
+            "AWS_BUCKET": "davivienda-faces",
+            "AWS_BUCKET_FOLDER_OLIMPIA": "davivienda-faces/",
+            "AWS_DYNAMO_TABLE": "davivienda_turns",
+            "AWS_COLLECTION_ID": "davivienda-faces",
+            "TWILIO_ACCOUNT_SID": "ACae501556753d2cf39a56dabf07b7b17a",
+            "TWILIO_AUTH_TOKEN": "13060e797a0db0fade7715866cc495fd",
+            "TWILIO_MESSAGING_SERVICE_SID": "MGe8ad5ba8a079d5da9c3e73eda128bb04",
+            "REGION": "us-east-1"
+          }
+        }
+      },
+      "DependsOn": [
+        "CompareFacesLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "CompareFacesLambdaVersionssh884HyB3pxDCmkh8gsUQ05ylz6K74TqnFazeeI": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CompareFacesLambdaFunction"
+        },
+        "CodeSha256": "eCdxU/C9n4sM4GNqNLm/UEdFxZvvY3Migwn9w0fAOR4="
+      }
+    },
+    "CreateCollectionLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/olimpia-serverless/dev/1566921546118-2019-08-27T15:59:06.118Z/olimpia-serverless.zip"
+        },
+        "FunctionName": "olimpia-serverless-dev-createCollection",
+        "Handler": "handler.createCollection",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs8.10",
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "AMAZON_DEV_ACCESS_KEY_ID": "AKIAYEBWVLF62BME7KU5",
+            "AMAZON_DEV_SECRET_ACCESS_KEY": "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",
+            "AWS_BUCKET": "davivienda-faces",
+            "AWS_BUCKET_FOLDER_OLIMPIA": "davivienda-faces/",
+            "AWS_DYNAMO_TABLE": "davivienda_turns",
+            "AWS_COLLECTION_ID": "davivienda-faces",
+            "TWILIO_ACCOUNT_SID": "ACae501556753d2cf39a56dabf07b7b17a",
+            "TWILIO_AUTH_TOKEN": "13060e797a0db0fade7715866cc495fd",
+            "TWILIO_MESSAGING_SERVICE_SID": "MGe8ad5ba8a079d5da9c3e73eda128bb04",
+            "REGION": "us-east-1"
+          }
+        }
+      },
+      "DependsOn": [
+        "CreateCollectionLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "CreateCollectionLambdaVersion2DgJvMGLipzhp02wepB6hnKXRu25dIm7e1MPknVaDM": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CreateCollectionLambdaFunction"
+        },
+        "CodeSha256": "eCdxU/C9n4sM4GNqNLm/UEdFxZvvY3Migwn9w0fAOR4="
+      }
+    },
+    "DeleteCollectionLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/olimpia-serverless/dev/1566921546118-2019-08-27T15:59:06.118Z/olimpia-serverless.zip"
+        },
+        "FunctionName": "olimpia-serverless-dev-deleteCollection",
+        "Handler": "handler.deleteCollection",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs8.10",
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "AMAZON_DEV_ACCESS_KEY_ID": "AKIAYEBWVLF62BME7KU5",
+            "AMAZON_DEV_SECRET_ACCESS_KEY": "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",
+            "AWS_BUCKET": "davivienda-faces",
+            "AWS_BUCKET_FOLDER_OLIMPIA": "davivienda-faces/",
+            "AWS_DYNAMO_TABLE": "davivienda_turns",
+            "AWS_COLLECTION_ID": "davivienda-faces",
+            "TWILIO_ACCOUNT_SID": "ACae501556753d2cf39a56dabf07b7b17a",
+            "TWILIO_AUTH_TOKEN": "13060e797a0db0fade7715866cc495fd",
+            "TWILIO_MESSAGING_SERVICE_SID": "MGe8ad5ba8a079d5da9c3e73eda128bb04",
+            "REGION": "us-east-1"
+          }
+        }
+      },
+      "DependsOn": [
+        "DeleteCollectionLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "DeleteCollectionLambdaVersion6BFwkzZ9figHXMpRnxuImRHGGxir636c9PVDef0B8": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "DeleteCollectionLambdaFunction"
+        },
+        "CodeSha256": "eCdxU/C9n4sM4GNqNLm/UEdFxZvvY3Migwn9w0fAOR4="
+      }
+    },
+    "IndexFacesLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/olimpia-serverless/dev/1566921546118-2019-08-27T15:59:06.118Z/olimpia-serverless.zip"
+        },
+        "FunctionName": "olimpia-serverless-dev-indexFaces",
+        "Handler": "handler.indexFaces",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs8.10",
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "AMAZON_DEV_ACCESS_KEY_ID": "AKIAYEBWVLF62BME7KU5",
+            "AMAZON_DEV_SECRET_ACCESS_KEY": "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",
+            "AWS_BUCKET": "davivienda-faces",
+            "AWS_BUCKET_FOLDER_OLIMPIA": "davivienda-faces/",
+            "AWS_DYNAMO_TABLE": "davivienda_turns",
+            "AWS_COLLECTION_ID": "davivienda-faces",
+            "TWILIO_ACCOUNT_SID": "ACae501556753d2cf39a56dabf07b7b17a",
+            "TWILIO_AUTH_TOKEN": "13060e797a0db0fade7715866cc495fd",
+            "TWILIO_MESSAGING_SERVICE_SID": "MGe8ad5ba8a079d5da9c3e73eda128bb04",
+            "REGION": "us-east-1"
+          }
+        }
+      },
+      "DependsOn": [
+        "IndexFacesLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "IndexFacesLambdaVersion0O2PjnZ72F6LQecH7aNyZqzIhIhsIUkx5FOOnDQko": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "IndexFacesLambdaFunction"
+        },
+        "CodeSha256": "eCdxU/C9n4sM4GNqNLm/UEdFxZvvY3Migwn9w0fAOR4="
+      }
+    },
+    "ListFacesLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/olimpia-serverless/dev/1566921546118-2019-08-27T15:59:06.118Z/olimpia-serverless.zip"
+        },
+        "FunctionName": "olimpia-serverless-dev-listFaces",
+        "Handler": "handler.listFaces",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs8.10",
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "AMAZON_DEV_ACCESS_KEY_ID": "AKIAYEBWVLF62BME7KU5",
+            "AMAZON_DEV_SECRET_ACCESS_KEY": "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",
+            "AWS_BUCKET": "davivienda-faces",
+            "AWS_BUCKET_FOLDER_OLIMPIA": "davivienda-faces/",
+            "AWS_DYNAMO_TABLE": "davivienda_turns",
+            "AWS_COLLECTION_ID": "davivienda-faces",
+            "TWILIO_ACCOUNT_SID": "ACae501556753d2cf39a56dabf07b7b17a",
+            "TWILIO_AUTH_TOKEN": "13060e797a0db0fade7715866cc495fd",
+            "TWILIO_MESSAGING_SERVICE_SID": "MGe8ad5ba8a079d5da9c3e73eda128bb04",
+            "REGION": "us-east-1"
+          }
+        }
+      },
+      "DependsOn": [
+        "ListFacesLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "ListFacesLambdaVersionb7KYQm17Qb9DyA1pJTrCkwUvfys0OaIhW1BgweNAE": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ListFacesLambdaFunction"
+        },
+        "CodeSha256": "eCdxU/C9n4sM4GNqNLm/UEdFxZvvY3Migwn9w0fAOR4="
+      }
+    },
+    "SearchFacesByImageLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/olimpia-serverless/dev/1566921546118-2019-08-27T15:59:06.118Z/olimpia-serverless.zip"
+        },
+        "FunctionName": "olimpia-serverless-dev-searchFacesByImage",
+        "Handler": "handler.searchFacesByImage",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs8.10",
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "AMAZON_DEV_ACCESS_KEY_ID": "AKIAYEBWVLF62BME7KU5",
+            "AMAZON_DEV_SECRET_ACCESS_KEY": "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",
+            "AWS_BUCKET": "davivienda-faces",
+            "AWS_BUCKET_FOLDER_OLIMPIA": "davivienda-faces/",
+            "AWS_DYNAMO_TABLE": "davivienda_turns",
+            "AWS_COLLECTION_ID": "davivienda-faces",
+            "TWILIO_ACCOUNT_SID": "ACae501556753d2cf39a56dabf07b7b17a",
+            "TWILIO_AUTH_TOKEN": "13060e797a0db0fade7715866cc495fd",
+            "TWILIO_MESSAGING_SERVICE_SID": "MGe8ad5ba8a079d5da9c3e73eda128bb04",
+            "REGION": "us-east-1"
+          }
+        }
+      },
+      "DependsOn": [
+        "SearchFacesByImageLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "SearchFacesByImageLambdaVersionUantjjPO8I7Wbfu1Ucu0rzrm8Z4HjPmGoeowu1iuI": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "SearchFacesByImageLambdaFunction"
+        },
+        "CodeSha256": "eCdxU/C9n4sM4GNqNLm/UEdFxZvvY3Migwn9w0fAOR4="
+      }
+    },
+    "GetItemByIdLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/olimpia-serverless/dev/1566921546118-2019-08-27T15:59:06.118Z/olimpia-serverless.zip"
+        },
+        "FunctionName": "olimpia-serverless-dev-getItemById",
+        "Handler": "handler.getItemById",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs8.10",
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "AMAZON_DEV_ACCESS_KEY_ID": "AKIAYEBWVLF62BME7KU5",
+            "AMAZON_DEV_SECRET_ACCESS_KEY": "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",
+            "AWS_BUCKET": "davivienda-faces",
+            "AWS_BUCKET_FOLDER_OLIMPIA": "davivienda-faces/",
+            "AWS_DYNAMO_TABLE": "davivienda_turns",
+            "AWS_COLLECTION_ID": "davivienda-faces",
+            "TWILIO_ACCOUNT_SID": "ACae501556753d2cf39a56dabf07b7b17a",
+            "TWILIO_AUTH_TOKEN": "13060e797a0db0fade7715866cc495fd",
+            "TWILIO_MESSAGING_SERVICE_SID": "MGe8ad5ba8a079d5da9c3e73eda128bb04",
+            "REGION": "us-east-1"
+          }
+        }
+      },
+      "DependsOn": [
+        "GetItemByIdLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "GetItemByIdLambdaVersionGZ24QZAmZpVtOxA6v0SarOrJV7OlJUSmpETCrkhmI": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetItemByIdLambdaFunction"
+        },
+        "CodeSha256": "eCdxU/C9n4sM4GNqNLm/UEdFxZvvY3Migwn9w0fAOR4="
+      }
+    },
+    "AddItemLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/olimpia-serverless/dev/1566921546118-2019-08-27T15:59:06.118Z/olimpia-serverless.zip"
+        },
+        "FunctionName": "olimpia-serverless-dev-addItem",
+        "Handler": "handler.addItem",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs8.10",
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "AMAZON_DEV_ACCESS_KEY_ID": "AKIAYEBWVLF62BME7KU5",
+            "AMAZON_DEV_SECRET_ACCESS_KEY": "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",
+            "AWS_BUCKET": "davivienda-faces",
+            "AWS_BUCKET_FOLDER_OLIMPIA": "davivienda-faces/",
+            "AWS_DYNAMO_TABLE": "davivienda_turns",
+            "AWS_COLLECTION_ID": "davivienda-faces",
+            "TWILIO_ACCOUNT_SID": "ACae501556753d2cf39a56dabf07b7b17a",
+            "TWILIO_AUTH_TOKEN": "13060e797a0db0fade7715866cc495fd",
+            "TWILIO_MESSAGING_SERVICE_SID": "MGe8ad5ba8a079d5da9c3e73eda128bb04",
+            "REGION": "us-east-1"
+          }
+        }
+      },
+      "DependsOn": [
+        "AddItemLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "AddItemLambdaVersionmZ4jm7rOkcwJWbHsjIYaCiFmzAwt2KoddHgeX6totg": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "AddItemLambdaFunction"
+        },
+        "CodeSha256": "eCdxU/C9n4sM4GNqNLm/UEdFxZvvY3Migwn9w0fAOR4="
+      }
+    },
+    "ApiGatewayRestApi": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "dev-olimpia-serverless",
+        "EndpointConfiguration": {
+          "Types": [
+            "EDGE"
+          ]
+        }
+      }
+    },
+    "ApiGatewayResourceRekognition": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "rekognition",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceCompareDashfaces": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "compare-faces",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceCreateDashcollection": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "create-collection",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceDeleteDashcollection": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "delete-collection",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceIndexDashfaces": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "index-faces",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceListDashfaces": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "list-faces",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceSearchDashface": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "search-face",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetDashitemDashbyDashid": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "get-item-by-id",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAddDashitem": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "add-item",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodSearchDashfaceOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                "method.response.header.Access-Control-Allow-Credentials": "'false'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceSearchDashface"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodGetDashitemDashbyDashidOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'",
+                "method.response.header.Access-Control-Allow-Credentials": "'false'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetDashitemDashbyDashid"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodAddDashitemOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                "method.response.header.Access-Control-Allow-Credentials": "'false'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAddDashitem"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodRekognitionPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceRekognition"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "UploadS3LambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodCompareDashfacesPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceCompareDashfaces"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "CompareFacesLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodCreateDashcollectionPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceCreateDashcollection"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "CreateCollectionLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodDeleteDashcollectionPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceDeleteDashcollection"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "DeleteCollectionLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodIndexDashfacesPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceIndexDashfaces"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "IndexFacesLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodListDashfacesPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceListDashfaces"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ListFacesLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodSearchDashfacePost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceSearchDashface"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "SearchFacesByImageLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodGetDashitemDashbyDashidGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetDashitemDashbyDashid"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetItemByIdLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodAddDashitemPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAddDashitem"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "AddItemLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayDeployment1566921546654": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "StageName": "dev"
+      },
+      "DependsOn": [
+        "ApiGatewayMethodSearchDashfaceOptions",
+        "ApiGatewayMethodGetDashitemDashbyDashidOptions",
+        "ApiGatewayMethodAddDashitemOptions",
+        "ApiGatewayMethodRekognitionPost",
+        "ApiGatewayMethodCompareDashfacesPost",
+        "ApiGatewayMethodCreateDashcollectionPost",
+        "ApiGatewayMethodDeleteDashcollectionPost",
+        "ApiGatewayMethodIndexDashfacesPost",
+        "ApiGatewayMethodListDashfacesPost",
+        "ApiGatewayMethodSearchDashfacePost",
+        "ApiGatewayMethodGetDashitemDashbyDashidGet",
+        "ApiGatewayMethodAddDashitemPost"
+      ]
+    },
+    "UploadS3LambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "UploadS3LambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": {
+          "Fn::Join": [
+            "",
+            [
+              "apigateway.",
+              {
+                "Ref": "AWS::URLSuffix"
+              }
+            ]
+          ]
+        },
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "CompareFacesLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "CompareFacesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": {
+          "Fn::Join": [
+            "",
+            [
+              "apigateway.",
+              {
+                "Ref": "AWS::URLSuffix"
+              }
+            ]
+          ]
+        },
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "CreateCollectionLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "CreateCollectionLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": {
+          "Fn::Join": [
+            "",
+            [
+              "apigateway.",
+              {
+                "Ref": "AWS::URLSuffix"
+              }
+            ]
+          ]
+        },
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "DeleteCollectionLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "DeleteCollectionLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": {
+          "Fn::Join": [
+            "",
+            [
+              "apigateway.",
+              {
+                "Ref": "AWS::URLSuffix"
+              }
+            ]
+          ]
+        },
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "IndexFacesLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "IndexFacesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": {
+          "Fn::Join": [
+            "",
+            [
+              "apigateway.",
+              {
+                "Ref": "AWS::URLSuffix"
+              }
+            ]
+          ]
+        },
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "ListFacesLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ListFacesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": {
+          "Fn::Join": [
+            "",
+            [
+              "apigateway.",
+              {
+                "Ref": "AWS::URLSuffix"
+              }
+            ]
+          ]
+        },
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "SearchFacesByImageLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SearchFacesByImageLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": {
+          "Fn::Join": [
+            "",
+            [
+              "apigateway.",
+              {
+                "Ref": "AWS::URLSuffix"
+              }
+            ]
+          ]
+        },
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "GetItemByIdLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetItemByIdLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": {
+          "Fn::Join": [
+            "",
+            [
+              "apigateway.",
+              {
+                "Ref": "AWS::URLSuffix"
+              }
+            ]
+          ]
+        },
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "AddItemLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "AddItemLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": {
+          "Fn::Join": [
+            "",
+            [
+              "apigateway.",
+              {
+                "Ref": "AWS::URLSuffix"
+              }
+            ]
+          ]
+        },
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ServerlessDeploymentBucketName": {
+      "Value": {
+        "Ref": "ServerlessDeploymentBucket"
+      }
+    },
+    "UploadS3LambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "UploadS3LambdaVersionbjJ2lu3T49jLRIHcKCxeRnV5UDES1h6lHMDt7I0ZHs"
+      }
+    },
+    "CompareFacesLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "CompareFacesLambdaVersionssh884HyB3pxDCmkh8gsUQ05ylz6K74TqnFazeeI"
+      }
+    },
+    "CreateCollectionLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "CreateCollectionLambdaVersion2DgJvMGLipzhp02wepB6hnKXRu25dIm7e1MPknVaDM"
+      }
+    },
+    "DeleteCollectionLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "DeleteCollectionLambdaVersion6BFwkzZ9figHXMpRnxuImRHGGxir636c9PVDef0B8"
+      }
+    },
+    "IndexFacesLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "IndexFacesLambdaVersion0O2PjnZ72F6LQecH7aNyZqzIhIhsIUkx5FOOnDQko"
+      }
+    },
+    "ListFacesLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ListFacesLambdaVersionb7KYQm17Qb9DyA1pJTrCkwUvfys0OaIhW1BgweNAE"
+      }
+    },
+    "SearchFacesByImageLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "SearchFacesByImageLambdaVersionUantjjPO8I7Wbfu1Ucu0rzrm8Z4HjPmGoeowu1iuI"
+      }
+    },
+    "GetItemByIdLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetItemByIdLambdaVersionGZ24QZAmZpVtOxA6v0SarOrJV7OlJUSmpETCrkhmI"
+      }
+    },
+    "AddItemLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "AddItemLambdaVersionmZ4jm7rOkcwJWbHsjIYaCiFmzAwt2KoddHgeX6totg"
+      }
+    },
+    "ServiceEndpoint": {
+      "Description": "URL of the service endpoint",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "ApiGatewayRestApi"
+            },
+            ".execute-api.us-east-2.",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/dev"
+          ]
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,89 @@
+service: olimpia-serverless # NOTE: update this with your service name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  profile: jorge_cetoco
+  region: us-east-2
+  environment:
+    AMAZON_DEV_ACCESS_KEY_ID: AKIAYEBWVLF62BME7KU5
+    AMAZON_DEV_SECRET_ACCESS_KEY: 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
+    AWS_BUCKET: davivienda-faces
+    AWS_BUCKET_FOLDER_OLIMPIA: davivienda-faces/
+    AWS_DYNAMO_TABLE: davivienda_turns
+    AWS_COLLECTION_ID: davivienda-faces
+    TWILIO_ACCOUNT_SID: ACae501556753d2cf39a56dabf07b7b17a
+    TWILIO_AUTH_TOKEN: 13060e797a0db0fade7715866cc495fd
+    TWILIO_MESSAGING_SERVICE_SID: MGe8ad5ba8a079d5da9c3e73eda128bb04
+    REGION: us-east-1
+
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: 
+        - "s3:Upload"
+      Resource:
+        - "arn:aws:s3:::*"
+
+functions:
+  uploadS3:
+    handler: handler.uploadS3
+    events:
+      - http:
+          method: post
+          path: rekognition
+  compareFaces:
+    handler: handler.compareFaces
+    events:
+      - http:
+          method: post
+          path: compare-faces
+  createCollection:
+    handler: handler.createCollection
+    events:
+      - http:
+          method: post
+          path: create-collection
+  deleteCollection:
+    handler: handler.deleteCollection
+    events:
+      - http:
+          method: post
+          path: delete-collection
+  indexFaces:
+    handler: handler.indexFaces
+    events:
+      - http:
+          method: post
+          path: index-faces
+  listFaces:
+    handler: handler.listFaces
+    events:
+      - http:
+          method: post
+          path: list-faces
+  searchFacesByImage:
+    handler: handler.searchFacesByImage
+    events:
+      - http:
+          method: post
+          path: search-face
+          cors: true
+  getItemById:
+    handler: handler.getItemById
+    events:
+      - http:
+          method: get
+          path: get-item-by-id
+          cors: true
+  addItem:
+    handler: handler.addItem
+    events:
+      - http:
+          method: post
+          path: add-item
+          cors: true
